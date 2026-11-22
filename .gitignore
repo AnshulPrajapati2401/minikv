@@ -8,3 +8,4 @@ build-tsan/
 *.log
 testdb/
 compile_commands.json
+overview/
