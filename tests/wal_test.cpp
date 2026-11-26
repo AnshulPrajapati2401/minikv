@@ -112,6 +112,7 @@ TEST_F(WalTest, TruncatedTailIsCorrupt) {
   EXPECT_EQ(reader->Next(&r), ReadStatus::kOk);
   EXPECT_EQ(reader->Next(&r), ReadStatus::kOk);
   EXPECT_EQ(reader->Next(&r), ReadStatus::kCorrupt);
+  EXPECT_EQ(reader->GoodOffset(), 38u);
 }
 
 TEST_F(WalTest, FlippedByteIsCorrupt) {

@@ -54,8 +54,10 @@ namespace minikv {
         public :
             static std::unique_ptr<WalReader> Open(const std::string& path);
             ReadStatus Next(WalRecord* record);
+            uint64_t GoodOffset() const { return good_offset_; }
         private:
             explicit WalReader(const std::string& path);
             std::ifstream file_;
+            uint64_t good_offset_ = 0;
     };
 }

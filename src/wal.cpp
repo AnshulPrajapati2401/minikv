@@ -175,6 +175,7 @@ namespace minikv {
         record->type = static_cast<WalRecordType>(type);
         record->key = std::move(key);
         record->value.assign(p, value_len);
+        good_offset_ += kHeaderSize + length;
         return ReadStatus::kOk;
     }
 }  // namespace minikv
