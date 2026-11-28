@@ -2,8 +2,6 @@
 
 #include <fcntl.h>
 #include <unistd.h>
-
-#include <cerrno>
 #include <utility>
 
 namespace minikv {
@@ -12,49 +10,7 @@ namespace minikv {
         constexpr size_t kHeaderSize = 8;
         constexpr uint32_t kMinPayload = 9;
         constexpr uint32_t kMaxPayload = 1u << 26;
-
-        void PutFixed32(std::string* dst, uint32_t value) {
-            char buf[4];
-            buf[0] = static_cast<char>(value & 0xFF);
-            buf[1] = static_cast<char>((value >> 8) & 0xFF);
-            buf[2] = static_cast<char>((value >> 16) & 0xFF);
-            buf[3] = static_cast<char>((value >> 24) & 0xFF);
-            dst->append(buf, 4);
-        }
-
-        uint32_t DecodeFixed32(const char* p) {
-            const unsigned char* u = reinterpret_cast<const unsigned char*>(p);
-            return static_cast<uint32_t>(u[0]) | (static_cast<uint32_t>(u[1]) << 8) |
-                    (static_cast<uint32_t>(u[2]) << 16) |
-                    (static_cast<uint32_t>(u[3]) << 24);
-        }
-
-        bool WriteAll(int fd, const char* data, size_t size) {
-            while (size > 0) {
-                ssize_t n = ::write(fd, data, size);
-                if (n < 0) {
-                    if (errno == EINTR) {
-                        continue;
-                    }
-                    return false;
-                }
-                data += n;
-                size -= static_cast<size_t>(n);
-            }
-            return true;
-        }
     }  // namespace
-
-    uint32_t Crc32(const char* data, size_t size) {
-        uint32_t crc = 0xFFFFFFFFu;
-        for (size_t i = 0; i < size; ++i) {
-            crc ^= static_cast<unsigned char>(data[i]);
-            for (int bit = 0; bit < 8; ++bit) {
-                crc = (crc >> 1) ^ (0xEDB88320u & (0u - (crc & 1u)));
-            }
-        }
-        return ~crc;
-    }
 
     WalWriter::WalWriter(int fd, bool sync_on_append)
         : fd_(fd), sync_on_append_(sync_on_append) {}

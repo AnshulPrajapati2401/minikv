@@ -18,14 +18,14 @@
 
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
 #include <fstream>
 #include <memory>
 #include <string>
 
+#include "minikv/helpers.h"
+
 namespace minikv {
-    uint32_t Crc32(const char *data , size_t size) ;
     enum class WalRecordType : uint8_t { kPut = 1, kDelete = 2 };
 
     struct WalRecord {

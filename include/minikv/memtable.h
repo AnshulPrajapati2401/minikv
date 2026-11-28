@@ -27,9 +27,9 @@
 #include <string>
 
 #include "minikv/skiplist.h"
+#include "minikv/status.h"
 
 namespace minikv {
-    enum class  GetStatus { kFound, kDeleted, kNotFound };
     class MemTable{
         public:
             MemTable() = default ;
